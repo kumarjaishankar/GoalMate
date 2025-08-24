@@ -4,6 +4,8 @@ import { AIControlPanel } from '@/components/AIControlPanel';
 import { ProgressCharts } from '@/components/ProgressCharts';
 import { MotivationalQuotes } from '@/components/MotivationalQuotes';
 import { TaskOverview } from '@/components/TaskOverview';
+import { NewsHeadlines } from '@/components/NewsHeadlines';
+import { QuickStats } from '@/components/QuickStats';
 
 const Index = () => {
   return (
@@ -12,10 +14,10 @@ const Index = () => {
       <header className="flex items-center justify-between mb-8">
         <div className="animate-fade-in">
           <h1 className="text-3xl md:text-4xl font-bold gradient-text mb-2">
-            Aether Tracker
+            Target Tracker
           </h1>
           <p className="text-muted-foreground">
-            Your intelligent productivity companion
+            Your intelligent goal achievement companion
           </p>
         </div>
         
@@ -29,12 +31,14 @@ const Index = () => {
         {/* Left Column */}
         <div className="space-y-6 animate-slide-up">
           <DigitalClock />
+          <NewsHeadlines />
           <AIControlPanel />
         </div>
 
         {/* Center Column */}
         <div className="space-y-6 animate-slide-up" style={{ animationDelay: '0.1s' }}>
           <TaskOverview />
+          <QuickStats />
         </div>
 
         {/* Right Column */}
