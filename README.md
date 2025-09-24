@@ -41,7 +41,7 @@ A full-stack task management application built with Spring Boot backend and Reac
 
 1. **Clone the repository**
    ```bash
-   git clone <your-repo-url>
+   git clone https://github.com/yourusername/GoalMate.git
    cd GoalMate/backend-springboot
    ```
 
@@ -149,12 +149,25 @@ GoalMate/
 - CORS protection
 - Input validation
 
+## Production Deployment
+
+### Backend Production Setup
+1. **Set environment variables** (see `.env.example`)
+2. **Use production profile**: `java -jar -Dspring.profiles.active=prod goalmate-backend-1.0.0.jar`
+3. **Configure database path** for persistent storage
+4. **Update CORS origins** to your domain
+5. **Use strong JWT secret** (minimum 32 characters)
+
+### Frontend Production Build
+1. **Update API URL** in `src/lib/api.ts`
+2. **Build for production**: `npm run build`
+3. **Deploy dist folder** to your web server
+
 ## Development Notes
 
 - SQLite database file (`tasks.db`) is created automatically
 - Email verification links work only when both frontend and backend are running
-- For production deployment, update email URLs in `EmailService.java`
-- Replace localhost URLs with your actual domain
+- For production, ensure all environment variables are properly configured
 
 ## Contributing
 

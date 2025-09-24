@@ -1,82 +1,85 @@
-# GoalMate Spring Boot Backend
+# GoalMate Backend
 
-## 🚀 Quick Start
+Spring Boot REST API for the GoalMate task management application.
 
-### Prerequisites
-- Java 17 or higher
+## Prerequisites
+- Java 21 or higher
 - Maven 3.6+
+- Gmail account for email functionality
 
-### Run the Application
+## Setup
 
-```bash
-# Navigate to Spring Boot backend
-cd backend-springboot
+1. **Configure Email**
+   
+   Create `.env` file in the root directory:
+   ```env
+   EMAIL_USER=your-email@gmail.com
+   EMAIL_PASSWORD=your-16-char-app-password
+   ```
 
-# Run with Maven
-mvn spring-boot:run
+2. **Run the Application**
+   ```bash
+   mvn spring-boot:run
+   ```
+   
+   Server starts at `http://localhost:8000`
 
-# Or build and run JAR
-mvn clean package
-java -jar target/goalmate-backend-1.0.0.jar
-```
-
-### Configuration
-
-Create `.env` file in the root directory:
-```properties
-EMAIL_USER=your-email@gmail.com
-EMAIL_PASSWORD=your-app-password
-```
-
-## 📋 API Endpoints
-
-All endpoints are identical to the FastAPI version:
+## API Endpoints
 
 ### Authentication
 - `POST /register` - Register new user
 - `POST /login` - User login
-- `POST /verify-email` - Verify email
+- `POST /verify-email` - Verify email with token
 - `POST /forgot-password` - Request password reset
-- `POST /reset-password` - Reset password
-- `POST /resend-verification` - Resend verification
+- `POST /reset-password` - Reset password with token
+- `POST /resend-verification` - Resend verification email
 
-### Tasks (Coming Next)
-- `GET /tasks/` - List user tasks
-- `POST /tasks/` - Create task
-- `GET /tasks/{id}` - Get task
+### Tasks
+- `GET /tasks` - Get user's tasks
+- `POST /tasks` - Create new task
 - `PUT /tasks/{id}` - Update task
 - `DELETE /tasks/{id}` - Delete task
 
-## 🔧 Features
+## Features
 
-✅ **Email Verification** - OTP-based registration
-✅ **Password Reset** - Secure email-based reset
-✅ **JWT Authentication** - Stateless authentication
-✅ **Password Validation** - Strong password requirements
-✅ **CORS Support** - Frontend integration ready
-✅ **SQLite Database** - Same database as FastAPI
-✅ **Debug Logging** - Console output for development
+- JWT Authentication
+- Email verification and password reset
+- SQLite database
+- CORS enabled for frontend
+- Password validation
+- Secure password hashing
 
-## 🎯 Migration Status
+## Tech Stack
 
-**✅ Completed:**
-- Project structure
-- Database entities (User, Task)
-- Email service
-- Authentication endpoints
-- Security configuration
-- JWT service
+- Spring Boot 3.2.0
+- Spring Security
+- JWT
+- SQLite
+- JavaMail
 
-**🔄 Next Steps:**
-- Task management endpoints
-- Analytics endpoints
-- Error handling
-- Testing
+## Production Deployment
 
-## 🔄 Switching from FastAPI
+1. **Configure Environment Variables**
+   ```bash
+   cp .env.example .env
+   # Edit .env with your production values
+   ```
 
-1. **Stop FastAPI backend**
-2. **Start Spring Boot backend:** `mvn spring-boot:run`
-3. **Frontend works unchanged** - same API endpoints!
+2. **Build Application**
+   ```bash
+   mvn clean package -DskipTests
+   ```
 
-The Spring Boot backend is 100% compatible with your existing frontend.
+3. **Run with Production Profile**
+   ```bash
+   java -jar -Dspring.profiles.active=prod target/goalmate-backend-1.0.0.jar
+   ```
+
+## Environment Variables
+
+- `JWT_SECRET` - Strong secret key (required)
+- `EMAIL_USER` - Gmail address (required)
+- `EMAIL_PASSWORD` - Gmail app password (required)
+- `DATABASE_PATH` - Database file location
+- `CORS_ORIGINS` - Allowed frontend domains
+- `PORT` - Server port (default: 8000)

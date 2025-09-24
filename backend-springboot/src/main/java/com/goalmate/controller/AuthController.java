@@ -45,9 +45,8 @@ public class AuthController {
 
     @PostMapping("/register")
     public ResponseEntity<Map<String, String>> register(@Valid @RequestBody UserCreateRequest request) {
-        logger.info("Registration attempt for username: {}, email: {}", request.getUsername(), request.getEmail());
+        logger.info("Registration attempt for username: {}", request.getUsername().replaceAll("[\r\n]", ""));
 
-        // Check if user already exists
         if (userRepository.existsByUsername(request.getUsername())) {
             throw new RuntimeException("Username already registered");
         }
@@ -56,11 +55,7 @@ public class AuthController {
             throw new RuntimeException("Email already registered");
         }
 
-        // Generate verification token
         String verificationToken = emailService.generateToken();
-        logger.debug("Generated verification token for user: {}", request.getUsername());
-
-        // Create new user (unverified)
         String hashedPassword = passwordEncoder.encode(request.getPassword());
         User user = new User(request.getUsername(), request.getEmail(), hashedPassword);
         user.setVerificationToken(verificationToken);
@@ -68,11 +63,7 @@ public class AuthController {
         user = userRepository.save(user);
         logger.info("User created successfully with ID: {}", user.getId());
 
-        // Send verification email
-        logger.info("Sending verification email to: {}", request.getEmail());
         boolean emailSent = emailService.sendVerificationEmail(request.getEmail(), verificationToken, request.getUsername());
-        logger.info("Verification email sent successfully: {}", emailSent);
-
         if (!emailSent) {
             throw new RuntimeException("Failed to send verification email");
         }
@@ -106,6 +97,9 @@ public class AuthController {
     @PostMapping("/verify-email")
     public ResponseEntity<Map<String, String>> verifyEmail(@RequestBody Map<String, String> request) {
         String token = request.get("token");
+        if (token == null || token.trim().isEmpty()) {
+            throw new RuntimeException("Token is required");
+        }
         Optional<User> userOpt = userRepository.findByVerificationToken(token);
 
         if (userOpt.isEmpty()) {
@@ -160,6 +154,13 @@ public class AuthController {
     public ResponseEntity<Map<String, String>> resetPassword(@RequestBody Map<String, String> request) {
         String token = request.get("token");
         String newPassword = request.get("new_password");
+        
+        if (token == null || token.trim().isEmpty()) {
+            throw new RuntimeException("Token is required");
+        }
+        if (newPassword == null || newPassword.trim().isEmpty()) {
+            throw new RuntimeException("New password is required");
+        }
 
         Optional<User> userOpt = userRepository.findByResetToken(token);
 
@@ -182,14 +183,7 @@ public class AuthController {
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping("/test-email")
-    public ResponseEntity<Map<String, String>> testEmail(@RequestParam String email) {
-        boolean emailSent = emailService.sendVerificationEmail(email, "test-token-123", "TestUser");
-        Map<String, String> response = new HashMap<>();
-        response.put("message", emailSent ? "Test email sent successfully!" : "Failed to send test email");
-        response.put("status", emailSent ? "success" : "failed");
-        return ResponseEntity.ok(response);
-    }
+
 
     @PostMapping("/resend-verification")
     public ResponseEntity<Map<String, String>> resendVerification(@RequestBody Map<String, String> request) {

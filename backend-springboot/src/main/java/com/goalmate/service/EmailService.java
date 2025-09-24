@@ -30,8 +30,6 @@ public class EmailService {
     @PostConstruct
     public void init() {
         logger.info("Email Service initialized");
-        logger.debug("Email user configured: {}", emailUser != null && !emailUser.isEmpty() ? "YES" : "NO");
-        logger.debug("Email password configured: {}", emailPassword != null && !emailPassword.isEmpty() ? "YES" : "NO");
     }
 
     public String generateToken() {
@@ -42,7 +40,7 @@ public class EmailService {
     }
 
     public boolean sendVerificationEmail(String toEmail, String token, String username) {
-        logger.info("Sending verification email to: {}", toEmail.replaceAll("[\r\n]", ""));
+        logger.info("Sending verification email to user: {}", username.replaceAll("[\r\n]", ""));
         
         try {
             String verificationUrl = "http://localhost:5173/verify-email?token=" + token;
@@ -52,6 +50,11 @@ public class EmailService {
                 logger.info("VERIFICATION LINK: {}", verificationUrl);
                 logger.info("Copy this link and paste it in your browser to verify your email");
                 return true;
+            }
+            
+            if (mailSender == null) {
+                logger.error("JavaMailSender is not configured");
+                return false;
             }
 
             MimeMessage message = mailSender.createMimeMessage();
@@ -93,6 +96,11 @@ public class EmailService {
                 logger.info("PASSWORD RESET LINK: {}", resetUrl);
                 logger.info("Copy this link and paste it in your browser to reset password");
                 return true;
+            }
+            
+            if (mailSender == null) {
+                logger.error("JavaMailSender is not configured");
+                return false;
             }
 
             MimeMessage message = mailSender.createMimeMessage();

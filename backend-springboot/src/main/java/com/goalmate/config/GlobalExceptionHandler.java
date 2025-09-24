@@ -15,17 +15,20 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(RuntimeException.class)
     public ResponseEntity<Map<String, String>> handleRuntimeException(RuntimeException ex) {
         Map<String, String> error = new HashMap<>();
-        error.put("detail", ex.getMessage());
+        String message = ex.getMessage();
+        error.put("detail", message != null ? message : "An error occurred");
         
         // Determine status code based on message
         HttpStatus status = HttpStatus.BAD_REQUEST;
-        if (ex.getMessage().contains("not found")) {
-            status = HttpStatus.NOT_FOUND;
-        } else if (ex.getMessage().contains("Incorrect username or password") || 
-                   ex.getMessage().contains("verify your email")) {
-            status = HttpStatus.UNAUTHORIZED;
-        } else if (ex.getMessage().contains("Failed to send")) {
-            status = HttpStatus.INTERNAL_SERVER_ERROR;
+        if (message != null) {
+            if (message.contains("not found")) {
+                status = HttpStatus.NOT_FOUND;
+            } else if (message.contains("Incorrect username or password") || 
+                       message.contains("verify your email")) {
+                status = HttpStatus.UNAUTHORIZED;
+            } else if (message.contains("Failed to send")) {
+                status = HttpStatus.INTERNAL_SERVER_ERROR;
+            }
         }
         
         return ResponseEntity.status(status).body(error);
