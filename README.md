@@ -1,73 +1,169 @@
-# Welcome to your Lovable project
+# GoalMate - Task Management Application
 
-## Project info
+A full-stack task management application built with Spring Boot backend and React frontend.
 
-**URL**: https://lovable.dev/projects/6a863a00-0a2d-4788-a916-0b7189d225e9
+## Features
 
-## How can I edit this code?
+- ✅ User Authentication (Register/Login)
+- ✅ Email Verification
+- ✅ Password Reset
+- ✅ Task Management (CRUD operations)
+- ✅ Task Categories and Priorities
+- ✅ Dashboard with Analytics
+- ✅ Responsive UI with Dark/Light themes
 
-There are several ways of editing your application.
+## Tech Stack
 
-**Use Lovable**
+### Backend
+- **Spring Boot 3.2.0**
+- **Java 21**
+- **SQLite Database**
+- **JWT Authentication**
+- **Spring Security**
+- **JavaMail for Email**
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/6a863a00-0a2d-4788-a916-0b7189d225e9) and start prompting.
+### Frontend
+- **React 18**
+- **TypeScript**
+- **Vite**
+- **Tailwind CSS**
+- **shadcn/ui Components**
+- **React Hook Form**
 
-Changes made via Lovable will be committed automatically to this repo.
+## Setup Instructions
 
-**Use your preferred IDE**
+### Prerequisites
+- Java 21 or higher
+- Node.js 18+ and npm
+- Gmail account for email functionality
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+### Backend Setup
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+1. **Clone the repository**
+   ```bash
+   git clone <your-repo-url>
+   cd GoalMate/backend-springboot
+   ```
 
-Follow these steps:
+2. **Configure Email (Required for email verification)**
+   
+   Create a `.env` file in `backend-springboot/` directory:
+   ```env
+   EMAIL_USER=your-email@gmail.com
+   EMAIL_PASSWORD=your-16-char-app-password
+   ```
+   
+   **To get Gmail App Password:**
+   - Enable 2-Factor Authentication on your Gmail
+   - Go to Google Account Settings → Security → App Passwords
+   - Generate a 16-character app password
+   - Use this password in the `.env` file
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+3. **Run the backend**
+   ```bash
+   # Using Maven wrapper (Windows)
+   .\mvnw spring-boot:run
+   
+   # Or using the batch file
+   .\start.bat
+   ```
+   
+   Backend will start on `http://localhost:8000`
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+### Frontend Setup
 
-# Step 3: Install the necessary dependencies.
-npm i
+1. **Navigate to frontend directory**
+   ```bash
+   cd ../frontend
+   ```
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
+2. **Install dependencies**
+   ```bash
+   npm install
+   ```
+
+3. **Start the development server**
+   ```bash
+   npm run dev
+   ```
+   
+   Frontend will start on `http://localhost:5173`
+
+## Usage
+
+1. **Register a new account** - You'll receive an email verification link
+2. **Verify your email** - Click the link in your email
+3. **Login** - Use your credentials to access the dashboard
+4. **Create tasks** - Add tasks with categories, priorities, and due dates
+5. **Manage tasks** - Mark as complete, edit, or delete tasks
+6. **View analytics** - Check your productivity insights
+
+## API Endpoints
+
+### Authentication
+- `POST /register` - Register new user
+- `POST /login` - User login
+- `POST /verify-email` - Verify email with token
+- `POST /forgot-password` - Request password reset
+- `POST /reset-password` - Reset password with token
+- `POST /resend-verification` - Resend verification email
+
+### Tasks (Requires Authentication)
+- `GET /tasks` - Get user's tasks
+- `POST /tasks` - Create new task
+- `PUT /tasks/{id}` - Update task
+- `DELETE /tasks/{id}` - Delete task
+
+## Project Structure
+
+```
+GoalMate/
+├── backend-springboot/
+│   ├── src/main/java/com/goalmate/
+│   │   ├── config/          # Security & CORS configuration
+│   │   ├── controller/      # REST controllers
+│   │   ├── dto/            # Data transfer objects
+│   │   ├── entity/         # JPA entities
+│   │   ├── repository/     # Data repositories
+│   │   └── service/        # Business logic
+│   ├── src/main/resources/
+│   │   └── application.properties
+│   └── .env                # Email configuration (create this)
+├── frontend/
+│   ├── src/
+│   │   ├── components/     # React components
+│   │   ├── contexts/       # React contexts
+│   │   ├── hooks/          # Custom hooks
+│   │   ├── lib/           # Utilities and API client
+│   │   └── pages/         # Page components
+│   └── package.json
+└── README.md
 ```
 
-**Edit a file directly in GitHub**
+## Security Features
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+- JWT-based authentication
+- Password hashing with BCrypt
+- Email verification for new accounts
+- Secure password reset flow
+- CORS protection
+- Input validation
 
-**Use GitHub Codespaces**
+## Development Notes
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+- SQLite database file (`tasks.db`) is created automatically
+- Email verification links work only when both frontend and backend are running
+- For production deployment, update email URLs in `EmailService.java`
+- Replace localhost URLs with your actual domain
 
-## What technologies are used for this project?
+## Contributing
 
-This project is built with:
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Test thoroughly
+5. Submit a pull request
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+## License
 
-## How can I deploy this project?
-
-Simply open [Lovable](https://lovable.dev/projects/6a863a00-0a2d-4788-a916-0b7189d225e9) and click on Share -> Publish.
-
-## Can I connect a custom domain to my Lovable project?
-
-Yes, you can!
-
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
-
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/tips-tricks/custom-domain#step-by-step-guide)
+This project is open source and available under the [MIT License](LICENSE).
